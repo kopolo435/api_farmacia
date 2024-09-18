@@ -1,0 +1,19 @@
+{
+  "extends": ["airbnb-base", "prettier"],
+  "env": {
+    "node": true,
+    "es6": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2022,
+    "sourceType": "module"
+  },
+  "rules": {
+    "linebreak-style": "off",
+    "quotes": ["error", "double"],
+    "import/extensions": ["error", "ignorePackages"]
+  },
+  "globals": {
+    "__dirname": true
+  }
+}

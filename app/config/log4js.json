@@ -1,0 +1,58 @@
+{
+  "appenders": {
+    "access": {
+      "type": "stdout",
+      "pattern": "-yyyy-MM-dd",
+      "category": "http"
+    },
+    "console": {
+      "type": "stdout",
+      "layout": {
+        "type": "pattern",
+        "pattern": "%[%d{yyyy-MM-dd hh:mm:ss}%] %[[%p]%] %c - %m%n"
+      }
+    },
+    "file": {
+      "type": "file",
+      "filename": "logs/app.log",
+      "layout": {
+        "type": "pattern",
+        "pattern": "%[%d{yyyy-MM-dd hh:mm:ss}%] %[[%p]%] %c - %m%n"
+      },
+      "maxLogSize": 10485760,
+      "backups": 3
+    },
+    "errors": {
+      "type": "file",
+      "filename": "logs/errors.log",
+      "layout": {
+        "type": "pattern",
+        "pattern": "%[%d{yyyy-MM-dd hh:mm:ss}%] %[[%p]%] %c - %m%n"
+      },
+      "maxLogSize": 10485760,
+      "backups": 3
+    }
+  },
+  "categories": {
+    "console": {
+      "appenders": ["console"],
+      "level": "debug"
+    },
+    "error": {
+      "appenders": ["errors", "console"],
+      "level": "error"
+    },
+    "file": {
+      "appenders": ["file", "console"],
+      "level": "debug"
+    },
+    "http": {
+      "appenders": ["access", "file"],
+      "level": "DEBUG"
+    },
+    "default": {
+      "appenders": ["console"],
+      "level": "debug"
+    }
+  }
+}
