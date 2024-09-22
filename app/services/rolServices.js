@@ -19,7 +19,7 @@ export const getRolById = async (id) => {
   try {
     const rol = await Rol.findByPk(id);
     if (rol) {
-      return { rol };
+      return { status: 1, data: rol };
     }
     return { status: 0 };
   } catch (error) {
@@ -41,10 +41,10 @@ export const updateRol = async (id, nombre) => {
     });
 
     if (updated) {
-      const updatedRol = await Rol.findByPk(id);
-      return { rol: updatedRol };
+      const data = await Rol.findByPk(id);
+      return { status: 1, data };
     }
-    return { result: 0 };
+    return { status: 0 };
   } catch (error) {
     logError.error(
       `Error occurred while updating role: ${JSON.stringify(error)}`,

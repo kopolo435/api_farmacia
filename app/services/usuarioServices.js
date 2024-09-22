@@ -32,8 +32,8 @@ export const updateUsuario = async (id, nombre, apellido, email, rol) => {
     });
 
     if (updated) {
-      const updatedUser = await Usuario.findByPk(id);
-      return { status: 1, user: updatedUser };
+      const data = Usuario.findByPk(id);
+      return { status: 1, data };
     }
     return { status: 0 };
   } catch (error) {
@@ -66,9 +66,9 @@ export const getUsuarioById = async (id) => {
   try {
     const user = await Usuario.findByPk(id);
     if (user) {
-      return { result: "success", user };
+      return { status: 1, data: user };
     }
-    return { error: "User not found" };
+    return { status: 0 };
   } catch (error) {
     logError.error(
       `Ocurrio un error al seleccionar un usuario: ${JSON.stringify(error)}`,

@@ -31,7 +31,12 @@ export const updateusuario = async (req, res) => {
     const error = getErrorBody(result.error, []);
     return res.status(error.status).json(error);
   }
-  return res.status(200).json({ status: "Usuario actualizado" });
+  if (result.status) {
+    return res
+      .status(200)
+      .json({ status: "registro actualizado", user: result.data });
+  }
+  return res.status(200).json({ status: "Id no encotrado" });
 };
 
 export const deleteUsuario = async (req, res) => {
@@ -51,5 +56,8 @@ export const selectusuario = async (req, res) => {
     const error = getErrorBody(result.error, []);
     return res.status(error.status).json(error);
   }
-  return res.status(200).json({ user: result.user });
+  if (result.status) {
+    return res.status(200).json({ user: result.data });
+  }
+  return res.status(200).json({ status: "Id no encotrado" });
 };

@@ -1,9 +1,18 @@
-import * as rolServices from "../services/rolServices.js";
+import * as clienteServices from "../services/clienteServices.js";
 import getErrorBody from "../helpers/errorResponse.js";
 
-export const createRol = async (req, res) => {
-  const { nombre } = req.body;
-  const result = await rolServices.createRol(nombre);
+// Function to create a client
+export const createCliente = async (req, res) => {
+  const { nombres, apellidos, fechaNacimiento, email, alergias, medicamentos } =
+    req.body;
+  const result = await clienteServices.createCliente(
+    nombres,
+    apellidos,
+    fechaNacimiento,
+    email,
+    alergias,
+    medicamentos,
+  );
   if (result.error) {
     const error = getErrorBody(result.error, []);
     return res.status(error.status).json(error);
@@ -11,10 +20,20 @@ export const createRol = async (req, res) => {
   return res.status(201).json({ status: "registro creado" });
 };
 
-export const updateRol = async (req, res) => {
-  const { nombre } = req.body;
+// Function to update a client
+export const updateCliente = async (req, res) => {
+  const { nombres, apellidos, fechaNacimiento, email, alergias, medicamentos } =
+    req.body;
   const { id } = req.params;
-  const result = await rolServices.updateRol(id, nombre);
+  const result = await clienteServices.updateCliente(
+    id,
+    nombres,
+    apellidos,
+    fechaNacimiento,
+    email,
+    alergias,
+    medicamentos,
+  );
   if (result.error) {
     const error = getErrorBody(result.error, []);
     return res.status(error.status).json(error);
@@ -27,9 +46,10 @@ export const updateRol = async (req, res) => {
   return res.status(200).json({ status: "Id no encontrado" });
 };
 
-export const deleteRol = async (req, res) => {
+// Function to delete a client
+export const deleteCliente = async (req, res) => {
   const { id } = req.params;
-  const result = await rolServices.deleteRol(id);
+  const result = await clienteServices.deleteCliente(id);
   if (result.error) {
     const error = getErrorBody(result.error, []);
     return res.status(error.status).json(error);
@@ -40,9 +60,10 @@ export const deleteRol = async (req, res) => {
   return res.status(200).json({ status: "Id no encontrado" });
 };
 
-export const selectRol = async (req, res) => {
+// Function to select a client
+export const selectCliente = async (req, res) => {
   const { id } = req.params;
-  const result = await rolServices.getRolById(id);
+  const result = await clienteServices.getClienteById(id);
   if (result.error) {
     const error = getErrorBody(result.error, []);
     return res.status(error.status).json(error);
