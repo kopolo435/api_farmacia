@@ -1,5 +1,5 @@
 import { DataTypes } from "sequelize";
-import sequelizeConnection from "../config/dbConfig.js"; // Adjust the import path as necessary
+import sequelizeConnection from "../config/dbConfig.js";
 
 const Inventario = sequelizeConnection.define(
   "Inventario",

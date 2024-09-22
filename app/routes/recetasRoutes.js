@@ -3,9 +3,9 @@ import * as recetaController from "../controllers/recetaController.js";
 
 const router = express.Router();
 
-router.post("/recetas", recetaController.createReceta);
-router.put("/recetas/:id", recetaController.updateReceta);
-router.delete("/recetas/:id", recetaController.deleteReceta);
-router.get("/recetas/:id", recetaController.selectReceta);
+router.post("/", recetaController.createReceta);
+router.put("/:id", recetaController.updateReceta);
+router.delete("/:id", recetaController.deleteReceta);
+router.get("/:id", recetaController.selectReceta);
 
 export default router;
