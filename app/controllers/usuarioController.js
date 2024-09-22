@@ -51,7 +51,5 @@ export const selectusuario = async (req, res) => {
     const error = getErrorBody(result.error, []);
     return res.status(error.status).json(error);
   }
-  return res
-    .status(200)
-    .json({ status: "Usuario eliminado", user: result.user });
+  return res.status(200).json({ user: result.user });
 };
