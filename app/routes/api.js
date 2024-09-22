@@ -7,6 +7,8 @@ import proveedoresRouter from "./proveedoresRouter.js";
 import unidadMedicamentoRouter from "./unidadMedicamentoRouter.js";
 import invetarioRouter from "./inventarioRouter.js";
 import ventasRouter from "./ventasRouter.js";
+import logventasRouter from "./logVentasRouter.js";
+import logInventarioRouter from "./logInventarioRouter.js";
 
 const router = express.Router();
 
@@ -18,5 +20,7 @@ router.use("/proveedores", proveedoresRouter);
 router.use("/unidad-medicamento", unidadMedicamentoRouter);
 router.use("/inventario", invetarioRouter);
 router.use("/ventas", ventasRouter);
+router.use("/log-inventario", logInventarioRouter);
+router.use("/log-ventas", logventasRouter);
 
 export default router;
