@@ -1,17 +1,18 @@
-import * as clienteServices from "../services/clienteServices.js";
+import * as recetaServices from "../services/recetasServices.js";
 import getErrorBody from "../helpers/errorResponse.js";
 
-export const createCliente = async (req, res) => {
-  const { nombres, apellidos, fechaNacimiento, email, alergias, medicamentos } =
+// Function to create a receta
+export const createReceta = async (req, res) => {
+  const { idClienteFK, idUsuarioFK, fechaEmision, tipoReceta, archivoReceta } =
     req.body;
-  const result = await clienteServices.createCliente(
-    nombres,
-    apellidos,
-    fechaNacimiento,
-    email,
-    alergias,
-    medicamentos,
+  const result = await recetaServices.createReceta(
+    idClienteFK,
+    idUsuarioFK,
+    fechaEmision,
+    tipoReceta,
+    archivoReceta,
   );
+
   if (result.error) {
     const error = getErrorBody(result.error, []);
     return res.status(error.status).json(error);
@@ -19,19 +20,20 @@ export const createCliente = async (req, res) => {
   return res.status(201).json({ status: "registro creado" });
 };
 
-export const updateCliente = async (req, res) => {
-  const { nombres, apellidos, fechaNacimiento, email, alergias, medicamentos } =
+// Function to update a receta
+export const updateReceta = async (req, res) => {
+  const { idClienteFK, idUsuarioFK, fechaEmision, tipoReceta, archivoReceta } =
     req.body;
   const { id } = req.params;
-  const result = await clienteServices.updateCliente(
+  const result = await recetaServices.updateReceta(
     id,
-    nombres,
-    apellidos,
-    fechaNacimiento,
-    email,
-    alergias,
-    medicamentos,
+    idClienteFK,
+    idUsuarioFK,
+    fechaEmision,
+    tipoReceta,
+    archivoReceta,
   );
+
   if (result.error) {
     const error = getErrorBody(result.error, []);
     return res.status(error.status).json(error);
@@ -44,9 +46,11 @@ export const updateCliente = async (req, res) => {
   return res.status(200).json({ status: "Id no encontrado" });
 };
 
-export const deleteCliente = async (req, res) => {
+// Function to delete a receta
+export const deleteReceta = async (req, res) => {
   const { id } = req.params;
-  const result = await clienteServices.deleteCliente(id);
+  const result = await recetaServices.deleteReceta(id);
+
   if (result.error) {
     const error = getErrorBody(result.error, []);
     return res.status(error.status).json(error);
@@ -57,14 +61,15 @@ export const deleteCliente = async (req, res) => {
   return res.status(200).json({ status: "Id no encontrado" });
 };
 
-export const selectCliente = async (req, res) => {
+// Function to select a receta
+export const selectReceta = async (req, res) => {
   const { id } = req.params;
-  const result = await clienteServices.getClienteById(id);
+  const result = await recetaServices.getRecetaById(id);
+
   if (result.error) {
     const error = getErrorBody(result.error, []);
     return res.status(error.status).json(error);
   }
-
   if (result.status) {
     return res.status(200).json({ result: result.data });
   }
