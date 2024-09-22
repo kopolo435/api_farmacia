@@ -1,5 +1,4 @@
 import "dotenv/config";
-import createError from "http-errors";
 import express from "express";
 import path from "path";
 import cookieParser from "cookie-parser";
@@ -7,6 +6,7 @@ import compression from "compression";
 import cors from "cors";
 import log4js from "log4js";
 import api from "./routes/api.js";
+import { logError } from "./config/loggers.js";
 
 // eslint-disable-next-line no-underscore-dangle
 global.__dirname = path.resolve("./");
@@ -35,16 +35,20 @@ app.use(
 app.use("/", api);
 
 // catch 404 and forward to error handler
-app.use((req, res, next) => {
-  next(createError(404));
+app.use((req, res) => {
+  res.status(404).json({ message: "Pagina no encontrada" });
 });
 
 // error handler
+// eslint-disable-next-line consistent-return
 app.use((err, req, res) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};
-
+  if (err instanceof SyntaxError && err.status === 400 && "body" in err) {
+    logError.error(JSON.stringify(err));
+    return res.status(400).send({ status: 400, message: err.message }); // Bad request
+  }
   // response con error
   res.status(err.status || 500).json({ error: err.message });
 });
