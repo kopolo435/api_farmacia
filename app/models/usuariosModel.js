@@ -2,7 +2,6 @@ import { DataTypes } from "sequelize";
 import Rol from "./rolModel.js";
 import sequelizeConnetion from "../config/dbConfig.js";
 
-// Define the 'Usuarios' model
 const Usuario = sequelizeConnetion.define(
   "Usuario",
   {

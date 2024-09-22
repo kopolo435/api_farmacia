@@ -1,7 +1,6 @@
 import Clientes from "../models/clienteModel.js"; // Adjust the import path as necessary
 import { logError } from "../config/loggers.js";
 
-// Function to create a client
 export const createCliente = async (
   nombres,
   apellidos,
@@ -28,7 +27,6 @@ export const createCliente = async (
   }
 };
 
-// Function to update a client by ID
 export const updateCliente = async (
   id,
   nombres,
@@ -56,7 +54,7 @@ export const updateCliente = async (
       const data = await Clientes.findByPk(id);
       return { status: 1, data };
     }
-    return { status: 0 }; // No rows updated
+    return { status: 0 };
   } catch (error) {
     logError.error(
       `Error occurred while updating client: ${JSON.stringify(error)}`,
@@ -65,7 +63,6 @@ export const updateCliente = async (
   }
 };
 
-// Function to delete a client by ID
 export const deleteCliente = async (id) => {
   try {
     const deleted = await Clientes.destroy({
@@ -73,9 +70,9 @@ export const deleteCliente = async (id) => {
     });
 
     if (deleted) {
-      return { status: 1 }; // Successfully deleted
+      return { status: 1 };
     }
-    return { status: 0 }; // No rows deleted
+    return { status: 0 };
   } catch (error) {
     logError.error(
       `Error occurred while deleting client: ${JSON.stringify(error)}`,

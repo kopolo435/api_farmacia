@@ -1,7 +1,6 @@
 import Usuario from "../models/usuariosModel.js";
 import { logError } from "../config/loggers.js";
 
-// eslint-disable-next-line import/prefer-default-export
 export const createUsuario = async (nombre, apellido, email, password, rol) => {
   try {
     await Usuario.create({

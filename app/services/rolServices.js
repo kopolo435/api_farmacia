@@ -1,4 +1,4 @@
-import Rol from "../models/rolModel.js"; // Adjust the import path as needed
+import Rol from "../models/rolModel.js";
 import { logError } from "../config/loggers.js";
 
 export const createRol = async (nombre) => {
@@ -30,7 +30,6 @@ export const getRolById = async (id) => {
   }
 };
 
-// Function to update a role by ID
 export const updateRol = async (id, nombre) => {
   const updates = {
     nombres: nombre,
@@ -53,7 +52,6 @@ export const updateRol = async (id, nombre) => {
   }
 };
 
-// Function to delete a role by ID
 export const deleteRol = async (id) => {
   try {
     const deleted = await Rol.destroy({

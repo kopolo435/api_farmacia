@@ -1,8 +1,8 @@
 import { DataTypes } from "sequelize";
 import sequelizeConnection from "../config/dbConfig.js";
 
-const Clientes = sequelizeConnection.define(
-  "Clientes",
+const Recetas = sequelizeConnection.define(
+  "Recetas",
   {
     id: {
       type: DataTypes.INTEGER,
@@ -10,39 +10,39 @@ const Clientes = sequelizeConnection.define(
       autoIncrement: true,
       allowNull: false,
     },
-    nombres: {
-      type: DataTypes.STRING,
+    id_clienteFK: {
+      type: DataTypes.INTEGER,
       allowNull: false,
+      references: {
+        model: "Clientes",
+        key: "id",
+      },
     },
-    apellidos: {
-      type: DataTypes.STRING,
+    id_usuarioFK: {
+      type: DataTypes.INTEGER,
       allowNull: false,
+      references: {
+        model: "Usuarios",
+        key: "id",
+      },
     },
-    fecha_nacimiento: {
+    fecha_emision: {
       type: DataTypes.DATE,
       allowNull: false,
     },
-    email: {
+    tipo_receta: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
-      validate: {
-        isEmail: true,
-      },
     },
-    alergias: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    medicamentos_en_uso: {
+    archivo_receta: {
       type: DataTypes.STRING,
       allowNull: true,
     },
   },
   {
-    tableName: "Clientes",
+    tableName: "Recetas",
     timestamps: false,
   },
 );
 
-export default Clientes;
+export default Recetas;
