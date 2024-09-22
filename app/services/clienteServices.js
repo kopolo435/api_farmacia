@@ -1,4 +1,4 @@
-import Clientes from "../models/clienteModel.js"; // Adjust the import path as necessary
+import Clientes from "../models/clienteModel.js";
 import { logError } from "../config/loggers.js";
 
 export const createCliente = async (

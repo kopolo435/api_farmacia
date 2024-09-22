@@ -5,6 +5,7 @@ import clienteRouter from "./clienteRouter.js";
 import recetasRouter from "./recetasRoutes.js";
 import proveedoresRouter from "./proveedoresRouter.js";
 import unidadMedicamentoRouter from "./unidadMedicamentoRouter.js";
+import invetarioRouter from "./inventarioRouter.js";
 
 const router = express.Router();
 
@@ -14,5 +15,6 @@ router.use("/cliente", clienteRouter);
 router.use("/recetas", recetasRouter);
 router.use("/proveedores", proveedoresRouter);
 router.use("/unidad-medicamento", unidadMedicamentoRouter);
+router.use("/inventario", invetarioRouter);
 
 export default router;
