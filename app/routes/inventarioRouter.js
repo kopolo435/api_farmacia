@@ -6,6 +6,7 @@ const router = express.Router();
 router.post("/", inventarioController.createInventario);
 router.put("/:id", inventarioController.updateInventario);
 router.delete("/:id", inventarioController.deleteInventario);
+router.get("/", inventarioController.getFarmaciaInventario);
 router.get("/:id", inventarioController.selectInventario);
 
 export default router;

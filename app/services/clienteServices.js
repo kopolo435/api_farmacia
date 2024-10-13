@@ -96,3 +96,18 @@ export const getClienteById = async (id) => {
     return { error: "-1" };
   }
 };
+
+export const getClientes = async () => {
+  try {
+    const client = await Clientes.findAll();
+    if (client) {
+      return { status: 1, data: client };
+    }
+    return { status: 0 };
+  } catch (error) {
+    logError.error(
+      `Error occurred while fetching client: ${JSON.stringify(error)}`,
+    );
+    return { error: "-1" };
+  }
+};

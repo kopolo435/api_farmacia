@@ -1,4 +1,5 @@
 import Inventario from "../models/inventarioModel.js"; // Adjust the import path as necessary
+import Proveedores from "../models/proveedoresModel.js";
 import { logError } from "../config/loggers.js";
 
 export const createInventario = async (
@@ -96,6 +97,32 @@ export const getInventarioById = async (id) => {
     logError.error(
       `Error occurred while fetching product: ${JSON.stringify(error)}`,
     );
+    return { error: "-1" };
+  }
+};
+
+export const getFarmaciaInventario = async () => {
+  try {
+    const inventarioData = await Inventario.findAll({
+      attributes: [
+        "id",
+        "nombre_producto",
+        "cantidad_disponible",
+        "precio",
+        "fecha_vencimiento",
+        "tipo_medicamento",
+      ],
+      include: [
+        {
+          model: Proveedores,
+          as: "proveedor",
+          attributes: ["nombre_proveedor"],
+        },
+      ],
+    });
+    return inventarioData;
+  } catch (error) {
+    logError.error(`Error occurred while fetching inventory: ${error.message}`);
     return { error: "-1" };
   }
 };

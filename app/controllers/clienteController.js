@@ -70,3 +70,16 @@ export const selectCliente = async (req, res) => {
   }
   return res.status(200).json({ status: "Id no encontrado" });
 };
+
+export const getAllClientes = async (req, res) => {
+  const result = await clienteServices.getClientes();
+  if (result.error) {
+    const error = getErrorBody(result.error, []);
+    return res.status(error.status).json(error);
+  }
+
+  if (result.status) {
+    return res.status(200).json({ result: result.data });
+  }
+  return res.status(200).json({ status: "No se encontraron clientes" });
+};
