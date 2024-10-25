@@ -57,3 +57,13 @@ export const selectUnidadMedicamento = async (req, res) => {
   }
   return res.status(200).json({ status: "Id no encontrado" });
 };
+
+export const getUnidadMedicamento = async (req, res) => {
+  const result = await unidadMedicamentoServices.getUnidadMedicamento();
+  if (result.error) {
+    const error = getErrorBody(result.error, []);
+    return res.status(error.status).json(error);
+  }
+
+  return res.status(200).json({ result: result.data });
+};

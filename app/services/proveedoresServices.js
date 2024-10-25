@@ -88,3 +88,21 @@ export const getProveedorById = async (id) => {
     return { error: "-1" };
   }
 };
+
+// select all proveedores
+export const getProveedores = async () => {
+  try {
+    const proveedores = await Proveedores.findAll({
+      attributes: ["id", "nombre_proveedor"],
+    });
+    if (proveedores) {
+      return { status: 1, data: proveedores };
+    }
+    return { status: 0 };
+  } catch (error) {
+    logError.error(
+      `Error occurred while fetching proveedores: ${JSON.stringify(error)}`,
+    );
+    return { error: "-1" };
+  }
+};

@@ -74,3 +74,14 @@ export const selectProveedor = async (req, res) => {
 
   return res.status(200).json({ status: "Id no encontrado" });
 };
+
+export const getProveedores = async (req, res) => {
+  const result = await proveedorServices.getProveedores();
+
+  if (result.error) {
+    const error = getErrorBody(result.error, []);
+    return res.status(error.status).json(error);
+  }
+
+  return res.status(200).json({ result: result.data });
+};

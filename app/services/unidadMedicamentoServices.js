@@ -70,3 +70,18 @@ export const getUnidadMedicamentoById = async (id) => {
     return { error: "-1" };
   }
 };
+
+// Select all UnidadMedicamento
+export const getUnidadMedicamento = async () => {
+  try {
+    const unidadData = await UnidadMedicamento.findAll({
+      attributes: ["id", "nombre"],
+    });
+    return { status: 1, data: unidadData };
+  } catch (error) {
+    logError.error(
+      `Error occurred while fetching unidad medicamento: ${JSON.stringify(error)}`,
+    );
+    return { error: "-1" };
+  }
+};

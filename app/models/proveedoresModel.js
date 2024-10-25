@@ -36,4 +36,6 @@ const Proveedores = sequelizeConnection.define(
   },
 );
 
+// Proveedores.hasMany(Inventario, { foreignKey: "id_proveedorFK", as: "inventarios" });
+
 export default Proveedores;

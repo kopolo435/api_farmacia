@@ -56,4 +56,9 @@ const Inventario = sequelizeConnection.define(
   },
 );
 
+// // Relaciones: Un inventario pertenece a un proveedor
+// Inventario.belongsTo(Proveedores, { foreignKey: "id_proveedorFK", as: "proveedor" });
+// // Un inventario pertenece a una unidad de medicamento
+// Inventario.belongsTo(UnidadMedicamento, { foreignKey: "id_unidadFK", as: "unidad" });
+
 export default Inventario;

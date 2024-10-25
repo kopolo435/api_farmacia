@@ -26,7 +26,11 @@ export const createInventario = async (req, res) => {
     const error = getErrorBody(result.error, []);
     return res.status(error.status).json(error);
   }
-  return res.status(201).json({ status: "registro creado" });
+  // If successful, return the created item
+  return res.status(201).json({
+    status: "Registro creado",
+    data: result.data,
+  });
 };
 
 export const updateInventario = async (req, res) => {
@@ -59,7 +63,7 @@ export const updateInventario = async (req, res) => {
   if (result.status) {
     return res
       .status(200)
-      .json({ status: "registro actualizado", result: result.data });
+      .json({ status: "registro actualizado", data: result.data });
   }
   return res.status(200).json({ status: "Id no encontrado" });
 };
@@ -95,10 +99,12 @@ export const selectInventario = async (req, res) => {
 
 export const getFarmaciaInventario = async (req, res) => {
   const result = await inventarioServices.getFarmaciaInventario();
+  console.log(result);
   if (result.error) {
     const error = getErrorBody(result.error, []);
     return res.status(error.status).json(error);
   }
-
-  return res.status(200).json({ result: result.data });
+  console.log(result);
+  console.log("apunto de entregar");
+  return res.status(200).json({ result });
 };
