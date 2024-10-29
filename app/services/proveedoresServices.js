@@ -8,19 +8,21 @@ export const createProveedor = async (
   email,
   direccion,
 ) => {
+  if (!nombreProveedor || !telefono || !email || !direccion) {
+    return { error: "All fields are required" };
+  }
+
   try {
-    await Proveedores.create({
+    const newProveedor = await Proveedores.create({
       nombre_proveedor: nombreProveedor,
       telefono,
       email,
       direccion,
     });
-    return { result: 1 };
+    return { result: 1, data: newProveedor };
   } catch (error) {
-    logError.error(
-      `Error occurred while creating proveedor: ${JSON.stringify(error)}`,
-    );
-    return { error: "-1" };
+    logError.error(`Error occurred while creating proveedor: ${error.message}`);
+    return { error: "An error occurred while creating the proveedor" };
   }
 };
 
@@ -31,6 +33,10 @@ export const updateProveedor = async (
   email,
   direccion,
 ) => {
+  if (!id || !nombreProveedor || !telefono || !email || !direccion) {
+    return { error: "All fields are required" };
+  }
+
   const updates = {
     nombre_proveedor: nombreProveedor,
     telefono,
@@ -45,64 +51,64 @@ export const updateProveedor = async (
 
     if (updated) {
       const data = await Proveedores.findByPk(id);
-      return { status: 1, data };
+      return { result: 1, data };
     }
-    return { status: 0 };
+    return { result: 0 };
   } catch (error) {
-    logError.error(
-      `Error occurred while updating proveedor: ${JSON.stringify(error)}`,
-    );
-    return { error: "-1" };
+    logError.error(`Error occurred while updating proveedor: ${error.message}`);
+    return { error: "An error occurred while updating the proveedor" };
   }
 };
 
 export const deleteProveedor = async (id) => {
+  if (!id) {
+    return { error: "ID is required" };
+  }
+
   try {
     const deleted = await Proveedores.destroy({
       where: { id },
     });
 
     if (deleted) {
-      return { status: 1 };
+      return { result: 1 };
     }
-    return { status: 0 };
+    return { result: 0 };
   } catch (error) {
-    logError.error(
-      `Error occurred while deleting proveedor: ${JSON.stringify(error)}`,
-    );
-    return { error: "-1" };
+    logError.error(`Error occurred while deleting proveedor: ${error.message}`);
+    return { error: "An error occurred while deleting the proveedor" };
   }
 };
 
 export const getProveedorById = async (id) => {
+  if (!id) {
+    return { error: "ID is required" };
+  }
+
   try {
     const proveedor = await Proveedores.findByPk(id);
     if (proveedor) {
-      return { status: 1, data: proveedor };
+      return { result: 1, data: proveedor };
     }
-    return { status: 0 };
+    return { result: 0 };
   } catch (error) {
-    logError.error(
-      `Error occurred while fetching proveedor: ${JSON.stringify(error)}`,
-    );
-    return { error: "-1" };
+    logError.error(`Error occurred while fetching proveedor: ${error.message}`);
+    return { error: "An error occurred while fetching the proveedor" };
   }
 };
 
-// select all proveedores
+// Select all proveedores
 export const getProveedores = async () => {
   try {
-    const proveedores = await Proveedores.findAll({
-      attributes: ["id", "nombre_proveedor"],
-    });
+    const proveedores = await Proveedores.findAll();
     if (proveedores) {
-      return { status: 1, data: proveedores };
+      return { result: 1, data: proveedores };
     }
-    return { status: 0 };
+    return { result: 0 };
   } catch (error) {
     logError.error(
-      `Error occurred while fetching proveedores: ${JSON.stringify(error)}`,
+      `Error occurred while fetching proveedores: ${error.message}`,
     );
-    return { error: "-1" };
+    return { error: "An error occurred while fetching the proveedores" };
   }
 };

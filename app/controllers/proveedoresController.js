@@ -12,10 +12,10 @@ export const createProveedor = async (req, res) => {
 
   if (result.error) {
     const error = getErrorBody(result.error, []);
-    return res.status(error.status).json(error);
+    return res.status(400).json(error);
   }
 
-  return res.status(201).json({ status: "Registro creado" });
+  return res.status(201).json({ status: "Registro creado", data: result.data });
 };
 
 export const updateProveedor = async (req, res) => {
@@ -31,16 +31,16 @@ export const updateProveedor = async (req, res) => {
 
   if (result.error) {
     const error = getErrorBody(result.error, []);
-    return res.status(error.status).json(error);
+    return res.status(400).json(error);
   }
 
-  if (result.status) {
+  if (result.result === 1) {
     return res
       .status(200)
-      .json({ status: "Registro actualizado", result: result.data });
+      .json({ status: "Registro actualizado", data: result.data });
   }
 
-  return res.status(200).json({ status: "Id no encontrado" });
+  return res.status(404).json({ status: "Id no encontrado" });
 };
 
 export const deleteProveedor = async (req, res) => {
@@ -49,14 +49,14 @@ export const deleteProveedor = async (req, res) => {
 
   if (result.error) {
     const error = getErrorBody(result.error, []);
-    return res.status(error.status).json(error);
+    return res.status(400).json(error);
   }
 
-  if (result.status) {
+  if (result.result === 1) {
     return res.status(200).json({ status: "Registro eliminado" });
   }
 
-  return res.status(200).json({ status: "Id no encontrado" });
+  return res.status(404).json({ status: "Id no encontrado" });
 };
 
 export const selectProveedor = async (req, res) => {
@@ -65,14 +65,14 @@ export const selectProveedor = async (req, res) => {
 
   if (result.error) {
     const error = getErrorBody(result.error, []);
-    return res.status(error.status).json(error);
+    return res.status(400).json(error);
   }
 
-  if (result.status) {
-    return res.status(200).json({ result: result.data });
+  if (result.result === 1) {
+    return res.status(200).json({ data: result.data });
   }
 
-  return res.status(200).json({ status: "Id no encontrado" });
+  return res.status(404).json({ status: "Id no encontrado" });
 };
 
 export const getProveedores = async (req, res) => {
@@ -80,8 +80,8 @@ export const getProveedores = async (req, res) => {
 
   if (result.error) {
     const error = getErrorBody(result.error, []);
-    return res.status(error.status).json(error);
+    return res.status(400).json(error);
   }
 
-  return res.status(200).json({ result: result.data });
+  return res.status(200).json({ result });
 };
