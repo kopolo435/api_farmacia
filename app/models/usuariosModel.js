@@ -1,4 +1,6 @@
+/* eslint-disable no-param-reassign */
 import { DataTypes } from "sequelize";
+import bcrypt from "bcrypt";
 import Rol from "./rolModel.js";
 import sequelizeConnetion from "../config/dbConfig.js";
 
@@ -48,6 +50,17 @@ const Usuario = sequelizeConnetion.define(
   {
     tableName: "Usuarios",
     timestamps: false,
+    hooks: {
+      // Hash password before saving
+      beforeCreate: async (user) => {
+        user.password = await bcrypt.hash(user.password, 10);
+      },
+      beforeUpdate: async (user) => {
+        if (user.changed("password")) {
+          user.password = await bcrypt.hash(user.password, 10);
+        }
+      },
+    },
   },
 );
 

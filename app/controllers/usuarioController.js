@@ -61,3 +61,14 @@ export const selectusuario = async (req, res) => {
   }
   return res.status(200).json({ status: "Id no encotrado" });
 };
+
+export const login = async (req, res) => {
+  const { email, password } = req.body;
+  const result = await usuarioServices.login(email, password);
+  if (result.error) {
+    const error = getErrorBody(result.error, []);
+    return res.status(error.status).json(error);
+  }
+
+  return res.status(200).json({ token: result.token });
+};

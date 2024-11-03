@@ -40,6 +40,14 @@ const getErrorBody = (msg, errors) => {
       status: 403,
     };
   }
+  if (msg === "05") {
+    return {
+      type: "https://problems-registry.smartbear.com/unauthorized/",
+      title: "Sin autorización",
+      detail: "Las credenciales son incorrectas",
+      status: 401,
+    };
+  }
 
   if (msg === "30") {
     return {

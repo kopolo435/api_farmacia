@@ -1,5 +1,7 @@
+import bcrypt from "bcrypt";
 import Usuario from "../models/usuariosModel.js";
-import { logError } from "../config/loggers.js";
+import { logError, logToFile } from "../config/loggers.js";
+import { getJWT } from "../helpers/getJWT.js";
 
 export const createUsuario = async (nombre, apellido, email, password, rol) => {
   try {
@@ -72,6 +74,30 @@ export const getUsuarioById = async (id) => {
     logError.error(
       `Ocurrio un error al seleccionar un usuario: ${JSON.stringify(error)}`,
     );
+    return { error: "-1" };
+  }
+};
+
+export const login = async (email, password) => {
+  try {
+    // Find the user by email
+    const user = await Usuario.findOne({ where: { email } });
+
+    if (!user) {
+      return { error: "05" };
+    }
+
+    // Check if the provided password matches the hashed password
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    // If the password doesn't match, return null
+    if (!isPasswordValid) {
+      return { error: "05" };
+    }
+    const token = getJWT(user.id, user.nombres, user.id_rolFK);
+    return { token };
+  } catch (error) {
+    logToFile.error(`Error during login:${error}`);
     return { error: "-1" };
   }
 };
