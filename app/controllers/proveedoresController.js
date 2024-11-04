@@ -19,7 +19,8 @@ export const createProveedor = async (req, res) => {
 };
 
 export const updateProveedor = async (req, res) => {
-  const { nombreProveedor, telefono, email, direccion } = req.body;
+  const { telefono, email, direccion } = req.body;
+  const nombreProveedor = req.body.nombre_proveedor;
   const { id } = req.params;
   const result = await proveedorServices.updateProveedor(
     id,
@@ -77,6 +78,17 @@ export const selectProveedor = async (req, res) => {
 
 export const getProveedores = async (req, res) => {
   const result = await proveedorServices.getProveedores();
+
+  if (result.error) {
+    const error = getErrorBody(result.error, []);
+    return res.status(400).json(error);
+  }
+
+  return res.status(200).json({ result });
+};
+
+export const getTopProveedores = async (req, res) => {
+  const result = await proveedorServices.getTopProveedores();
 
   if (result.error) {
     const error = getErrorBody(result.error, []);

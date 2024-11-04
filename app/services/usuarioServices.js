@@ -95,7 +95,14 @@ export const login = async (email, password) => {
       return { error: "05" };
     }
     const token = getJWT(user.id, user.nombres, user.id_rolFK);
-    return { token };
+    return {
+      token,
+      user: {
+        nombre: user.nombres,
+        apellido: user.apellidos,
+        rol: user.id_rolFK,
+      },
+    };
   } catch (error) {
     logToFile.error(`Error during login:${error}`);
     return { error: "-1" };

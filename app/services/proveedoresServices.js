@@ -1,5 +1,6 @@
-import Proveedores from "../models/proveedoresModel.js";
-import { logError } from "../config/loggers.js";
+import { Sequelize } from "sequelize";
+import { logError, logToFile } from "../config/loggers.js";
+import { Ventas, Inventario, Proveedores } from "../models/relations.js";
 
 // Function to create a proveedor
 export const createProveedor = async (
@@ -110,5 +111,47 @@ export const getProveedores = async () => {
       `Error occurred while fetching proveedores: ${error.message}`,
     );
     return { error: "An error occurred while fetching the proveedores" };
+  }
+};
+
+export const getTopProveedores = async () => {
+  try {
+    const topProveedores = await Ventas.findAll({
+      attributes: [
+        "Inventario.id_proveedorFK",
+        [Sequelize.fn("COUNT", Sequelize.col("Ventas.id")), "total_sales"],
+      ],
+      include: [
+        {
+          model: Inventario,
+          as: "Inventario",
+          attributes: [],
+          required: true, // Ensures only sales with valid inventory records are counted
+        },
+      ],
+      group: ["Inventario.id_proveedorFK"],
+      order: [[Sequelize.literal("total_sales"), "DESC"]],
+      limit: 3,
+      raw: true,
+    });
+
+    // Fetch additional supplier information
+    const proveedoresInfo = await Promise.all(
+      topProveedores.map(async (proveedor) => {
+        const proveedorInfo = await Proveedores.findByPk(
+          proveedor.id_proveedorFK,
+        );
+        return {
+          nombre: proveedorInfo.nombre_proveedor,
+          id: proveedorInfo.id,
+          cantidadVendida: proveedor.total_sales,
+        };
+      }),
+    );
+
+    return proveedoresInfo;
+  } catch (err) {
+    logToFile.error(`Error fetching top proveedores:${err}`);
+    return { error: "-1" };
   }
 };

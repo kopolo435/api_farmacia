@@ -2,7 +2,8 @@ import * as usuarioServices from "../services/usuarioServices.js";
 import getErrorBody from "../helpers/errorResponse.js";
 // eslint-disable-next-line import/prefer-default-export
 export const createUsuario = async (req, res) => {
-  const { nombre, apellido, email, password, rol } = req.body;
+  const { nombre, apellido, email, password } = req.body;
+  const rol = 2;
   const result = await usuarioServices.createUsuario(
     nombre,
     apellido,
@@ -70,5 +71,5 @@ export const login = async (req, res) => {
     return res.status(error.status).json(error);
   }
 
-  return res.status(200).json({ token: result.token });
+  return res.status(200).json(result);
 };

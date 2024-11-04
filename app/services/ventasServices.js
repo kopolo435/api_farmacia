@@ -1,4 +1,4 @@
-import Ventas from "../models/ventasModel.js";
+import { Ventas } from "../models/relations.js";
 import { logError } from "../config/loggers.js";
 
 export const createVenta = async (

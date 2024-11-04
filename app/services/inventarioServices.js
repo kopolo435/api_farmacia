@@ -1,5 +1,4 @@
-import Inventario from "../models/inventarioModel.js"; // Adjust the import path as necessary
-import Proveedores from "../models/proveedoresModel.js";
+import { Inventario, Proveedores } from "../models/relations.js";
 import UnidadMedicamento from "../models/unidadMedicamento.js";
 import { logError } from "../config/loggers.js";
 import defineAssociations from "../associations/association_Inventario.js";
@@ -77,10 +76,9 @@ export const updateInventario = async (
         message: "Inventory updated successfully",
         data: updatedData,
       };
-    } 
-      // If no rows were affected, return a more meaningful response
-      return { status: 0, message: "No changes made, inventory not updated" };
-    
+    }
+    // If no rows were affected, return a more meaningful response
+    return { status: 0, message: "No changes made, inventory not updated" };
   } catch (error) {
     // Log the error and return a detailed error response
     logError.error(
