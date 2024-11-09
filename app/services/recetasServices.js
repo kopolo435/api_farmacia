@@ -1,5 +1,7 @@
 import Recetas from "../models/recetasModel.js"; // Adjust the import path as necessary
 import { logError } from "../config/loggers.js";
+import Clientes from "../models/clienteModel.js";
+import Usuario from "../models/usuariosModel.js";
 
 export const createReceta = async (
   idClienteFK,
@@ -87,6 +89,31 @@ export const getRecetaById = async (id) => {
   } catch (error) {
     logError.error(
       `Error occurred while fetching receta: ${JSON.stringify(error)}`,
+    );
+    return { error: "-1" };
+  }
+};
+
+export const getAllRecetas = async () => {
+  try {
+    const recetas = await Recetas.findAll({
+      include: [
+        {
+          model: Clientes,
+          as: "cliente",
+          attributes: ["nombres", "apellidos"],
+        },
+        {
+          model: Usuario,
+          as: "empleado",
+          attributes: ["nombres", "apellidos"],
+        },
+      ],
+    });
+    return { status: 1, data: recetas };
+  } catch (error) {
+    logError.error(
+      `Error occurred while fetching recetas: ${JSON.stringify(error)}`,
     );
     return { error: "-1" };
   }
