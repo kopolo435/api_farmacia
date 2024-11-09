@@ -7,5 +7,6 @@ router.post("/", recetaController.createReceta);
 router.put("/:id", recetaController.updateReceta);
 router.delete("/:id", recetaController.deleteReceta);
 router.get("/:id", recetaController.selectReceta);
+router.get("/", recetaController.getAllRecetas);
 
 export default router;
