@@ -47,7 +47,7 @@ const Recetas = sequelizeConnection.define(
   },
 );
 
-Recetas.belongsTo(Clientes, { foreignKey: "id_clienteFK", as: "cliente" });
-Recetas.belongsTo(Usuario, { foreignKey: "id_usuarioFK", as: "empleado" });
+Recetas.belongsTo(Clientes, { foreignKey: "id_clienteFK", as: "Clientes" });
+Recetas.belongsTo(Usuario, { foreignKey: "id_usuarioFK", as: "Usuarios" });
 
 export default Recetas;

@@ -100,12 +100,12 @@ export const getAllRecetas = async () => {
       include: [
         {
           model: Clientes,
-          as: "cliente",
+          as: "Clientes",
           attributes: ["nombres", "apellidos"],
         },
         {
           model: Usuario,
-          as: "empleado",
+          as: "Usuarios",
           attributes: ["nombres", "apellidos"],
         },
       ],
