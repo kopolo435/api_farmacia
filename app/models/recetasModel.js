@@ -1,5 +1,7 @@
 import { DataTypes } from "sequelize";
 import sequelizeConnection from "../config/dbConfig.js";
+import Clientes from "./clienteModel.js";
+import Usuario from "./usuariosModel.js";
 
 const Recetas = sequelizeConnection.define(
   "Recetas",
@@ -44,5 +46,8 @@ const Recetas = sequelizeConnection.define(
     timestamps: false,
   },
 );
+
+Recetas.belongsTo(Clientes, { foreignKey: "id_clienteFK", as: "cliente" });
+Recetas.belongsTo(Usuario, { foreignKey: "id_usuarioFK", as: "empleado" });
 
 export default Recetas;

@@ -75,3 +75,15 @@ export const selectReceta = async (req, res) => {
   }
   return res.status(200).json({ status: "Id no encontrado" });
 };
+
+// Function to fetch all recetas
+export const getAllRecetas = async (req, res) => {
+  const result = await recetaServices.getAllRecetas();
+
+  if (result.error) {
+    const error = getErrorBody(result.error, []);
+    return res.status(error.status).json(error);
+  }
+
+  return res.status(200).json({ result });
+};
