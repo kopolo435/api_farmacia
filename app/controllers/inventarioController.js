@@ -99,12 +99,39 @@ export const selectInventario = async (req, res) => {
 
 export const getFarmaciaInventario = async (req, res) => {
   const result = await inventarioServices.getFarmaciaInventario();
-  console.log(result);
   if (result.error) {
     const error = getErrorBody(result.error, []);
     return res.status(error.status).json(error);
   }
-  console.log(result);
-  console.log("apunto de entregar");
+  return res.status(200).json({ result });
+};
+
+export const getProductsToFinish = async (req, res) => {
+  const result = await inventarioServices.getProductsToFinish();
+
+  if (result.length === 0) {
+    return { error: "No products with low stock" };
+  }
+
+  if (result.error) {
+    const error = getErrorBody(result.error, []);
+    return res.status(error.status).json(error);
+  }
+
+  if (result.status) {
+    return res.status(200).json({ result });
+  }
+  return res.status(200).json(result);
+};
+
+export const getProductsToExpire = async (req, res) => {
+  const result = await inventarioServices.getProductsToExpire();
+  if (result.length === 0) {
+    return { error: "No products expiring soon" };
+  }
+  if (result.error) {
+    const error = getErrorBody(result.error, []);
+    return res.status(error.status).json(error);
+  }
   return res.status(200).json({ result });
 };

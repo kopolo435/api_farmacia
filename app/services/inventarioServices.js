@@ -1,3 +1,4 @@
+import Sequelize from "sequelize";
 import { Inventario, Proveedores } from "../models/relations.js";
 import UnidadMedicamento from "../models/unidadMedicamento.js";
 import { logError } from "../config/loggers.js";
@@ -125,7 +126,6 @@ export const getInventarioById = async (id) => {
 };
 
 export const getFarmaciaInventario = async () => {
-  console.log("getFarmaciaInventario");
   try {
     const inventarioData = await Inventario.findAll({
       attributes: [
@@ -150,6 +150,50 @@ export const getFarmaciaInventario = async () => {
       ],
     });
     return inventarioData;
+  } catch (error) {
+    logError.error(`Error occurred while fetching inventory: ${error.message}`);
+    return { error: "-1" };
+  }
+};
+
+export const getProductsToFinish = async () => {
+  try {
+    // Limite para cant baja de stock
+    const lowStockLimit = 5;
+    const productsToFinish = await Inventario.findAll({
+      attributes: ["id", "nombre_producto", "cantidad_disponible"],
+      where: {
+        cantidad_disponible: {
+          [Sequelize.Op.lte]: lowStockLimit,
+        },
+      },
+    });
+    return productsToFinish.length
+      ? { status: 1, data: productsToFinish }
+      : { status: 0 };
+  } catch (error) {
+    logError.error(
+      `Error occurred while fetching low-stock products: ${error.message}`,
+    );
+    return { error: "-1" };
+  }
+};
+
+export const getProductsToExpire = async () => {
+  try {
+    // Se configura fecha de expiracion limite de hasta 30 dias
+    const expirationDate = new Date();
+    expirationDate.setDate(expirationDate.getDate() + 30);
+
+    const productsToExpire = await Inventario.findAll({
+      attributes: ["id", "nombre_producto", "cantidad_disponible"],
+      where: {
+        fecha_vencimiento: {
+          [Sequelize.Op.lte]: expirationDate,
+        },
+      },
+    });
+    return productsToExpire;
   } catch (error) {
     logError.error(`Error occurred while fetching inventory: ${error.message}`);
     return { error: "-1" };
