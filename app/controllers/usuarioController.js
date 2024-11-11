@@ -73,3 +73,12 @@ export const login = async (req, res) => {
 
   return res.status(200).json(result);
 };
+
+export const getAllUsuarios = async (req, res) => {
+  const result = await usuarioServices.getAllUsuarios();
+  if (result.error) {
+    const error = getErrorBody(result.error, []);
+    return res.status(error.status).json(error);
+  }
+  return res.status(200).json({ users: result.data });
+};

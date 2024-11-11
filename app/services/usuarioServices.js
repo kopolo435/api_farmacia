@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import Usuario from "../models/usuariosModel.js";
 import { logError, logToFile } from "../config/loggers.js";
 import { getJWT } from "../helpers/getJWT.js";
+import Roles from "../models/rolModel.js";
 
 export const createUsuario = async (nombre, apellido, email, password, rol) => {
   try {
@@ -105,6 +106,28 @@ export const login = async (email, password) => {
     };
   } catch (error) {
     logToFile.error(`Error during login:${error}`);
+    return { error: "-1" };
+  }
+};
+
+export const getAllUsuarios = async () => {
+  try {
+    const users = await Usuario.findAll({
+      include: [
+        {
+          model: Roles,
+          as: "Rol",
+          attributes: ["nombres"],
+        },
+      ],
+    });
+    return { status: 1, data: users };
+  } catch (error) {
+    logError.error(
+      `Ocurrio un error al seleccionar todos los usuarios: ${JSON.stringify(
+        error,
+      )}`,
+    );
     return { error: "-1" };
   }
 };
