@@ -1,8 +1,8 @@
 import { DataTypes } from "sequelize";
 import sequelizeConnection from "../config/dbConfig.js";
 
-const Clientes = sequelizeConnection.define(
-  "Clientes",
+const Cliente = sequelizeConnection.define(
+  "Cliente",
   {
     id: {
       type: DataTypes.INTEGER,
@@ -45,4 +45,4 @@ const Clientes = sequelizeConnection.define(
   },
 );
 
-export default Clientes;
+export default Cliente;
