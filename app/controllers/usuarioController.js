@@ -2,8 +2,7 @@ import * as usuarioServices from "../services/usuarioServices.js";
 import getErrorBody from "../helpers/errorResponse.js";
 // eslint-disable-next-line import/prefer-default-export
 export const createUsuario = async (req, res) => {
-  const { nombre, apellido, email, password } = req.body;
-  const rol = 2;
+  const { nombre, apellido, email, password, rol } = req.body;
   const result = await usuarioServices.createUsuario(
     nombre,
     apellido,
@@ -19,13 +18,14 @@ export const createUsuario = async (req, res) => {
 };
 
 export const updateusuario = async (req, res) => {
-  const { nombre, apellido, email, rol } = req.body;
+  const { nombre, apellido, email, password, rol } = req.body;
   const { id } = req.params;
   const result = await usuarioServices.updateUsuario(
     id,
     nombre,
     apellido,
     email,
+    password,
     rol,
   );
   if (result.error) {
@@ -65,6 +65,11 @@ export const selectusuario = async (req, res) => {
 
 export const login = async (req, res) => {
   const { email, password } = req.body;
+  if (!email || !password) {
+    const error = getErrorBody("02", ["email", "password"]);
+    return res.status(error.status).json(error);
+  }
+
   const result = await usuarioServices.login(email, password);
   if (result.error) {
     const error = getErrorBody(result.error, []);

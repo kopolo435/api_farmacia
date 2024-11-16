@@ -21,7 +21,14 @@ export const createUsuario = async (nombre, apellido, email, password, rol) => {
   }
 };
 
-export const updateUsuario = async (id, nombre, apellido, email, rol) => {
+export const updateUsuario = async (
+  id,
+  nombre,
+  apellido,
+  email,
+  password,
+  rol,
+) => {
   const updates = {
     nombres: nombre,
     apellidos: apellido,
@@ -29,6 +36,10 @@ export const updateUsuario = async (id, nombre, apellido, email, rol) => {
     id_rolFK: rol,
   };
   try {
+    if (password) {
+      updates.password = await bcrypt.hash(password, 10);
+    }
+
     const [updated] = await Usuario.update(updates, {
       where: { id },
     });
@@ -99,6 +110,7 @@ export const login = async (email, password) => {
     return {
       token,
       user: {
+        id: user.id,
         nombre: user.nombres,
         apellido: user.apellidos,
         rol: user.id_rolFK,
