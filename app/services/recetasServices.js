@@ -1,3 +1,4 @@
+import { promises as fs } from "fs";
 import Recetas from "../models/recetasModel.js"; // Adjust the import path as necessary
 import { logError } from "../config/loggers.js";
 import Clientes from "../models/clienteModel.js";
@@ -40,8 +41,11 @@ export const updateReceta = async (
     id_usuarioFK: idUsuarioFK,
     fecha_emision: fechaEmision,
     tipo_receta: tipoReceta,
-    archivo_receta: archivoReceta,
   };
+
+  if (archivoReceta !== undefined) {
+    updates.archivo_receta = archivoReceta;
+  }
 
   try {
     const [updated] = await Recetas.update(updates, {
@@ -115,6 +119,19 @@ export const getAllRecetas = async () => {
     logError.error(
       `Error occurred while fetching recetas: ${JSON.stringify(error)}`,
     );
+    return { error: "-1" };
+  }
+};
+
+export const getPDFBase64 = async (filepath) => {
+  try {
+    const fileData = await fs.readFile(`./app/uploads/${filepath}`);
+
+    const base64String = fileData.toString("base64");
+
+    return { base64PDF: base64String };
+  } catch (error) {
+    logError.error(`Error reading the file at ${filepath}: ${error.message}`);
     return { error: "-1" };
   }
 };
