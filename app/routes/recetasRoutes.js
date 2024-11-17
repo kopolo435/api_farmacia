@@ -1,12 +1,13 @@
 import express from "express";
 import * as recetaController from "../controllers/recetaController.js";
+import { validateJWT } from "../middleware/validateJWT.js";
 
 const router = express.Router();
 
-router.post("/", recetaController.createReceta);
-router.put("/:id", recetaController.updateReceta);
-router.delete("/:id", recetaController.deleteReceta);
-router.get("/:id", recetaController.selectReceta);
-router.get("/", recetaController.getAllRecetas);
+router.post("/", validateJWT, recetaController.createReceta);
+router.put("/:id", validateJWT, recetaController.updateReceta);
+router.delete("/:id", validateJWT, recetaController.deleteReceta);
+router.get("/:id", validateJWT, recetaController.selectReceta);
+router.get("/", validateJWT, recetaController.getAllRecetas);
 
 export default router;
