@@ -8,6 +8,7 @@ variables:
   IMAGE_NAME: test-api-farmacia
   IMAGE_TAG: lastest
   ACR_NAME: topicos2testregistry.azurecr.io
+  ACR_CONNECTION_NAME: TopicosRegistry
   CONTAINER_GROUP_NAME: students_api
   RESOURCE_GROUP: test-api-running
   DNS_NAME_LABEL: farmacia-api 
@@ -17,7 +18,7 @@ steps:
   displayName: 'Login to ACR'
   inputs:
     command: login
-    containerRegistry: <YOUR-ACR-SERVICE-CONNECTION>
+    containerRegistry: $(TopicosRegistry)
 
 - task: Docker@2
   displayName: 'Build Docker Image'
