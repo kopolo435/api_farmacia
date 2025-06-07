@@ -1,8 +1,7 @@
 trigger:
 - main
 
-pool:
-  vmImage: ubuntu-latest
+pool: mini-white-pool
 
 variables:
   IMAGE_NAME: test-api-farmacia
@@ -40,21 +39,22 @@ steps:
   displayName: 'Deploy to Azure Container Instances'
   inputs:
     azureSubscription: $(AZURE_RESOURCE_CONNECTION)
-    scriptType: bash
+    scriptType: ps
     scriptLocation: inlineScript
     inlineScript: |
-      az container delete \
-        --name $(CONTAINER_GROUP_NAME) \
-        --resource-group $(RESOURCE_GROUP) \
-        --yes || true
+      az container delete `
+        --name $(CONTAINER_GROUP_NAME) `
+        --resource-group $(RESOURCE_GROUP) `
+        --yes
 
-      az container create \
-        --resource-group $(RESOURCE_GROUP) \
-        --name $(CONTAINER_GROUP_NAME) \
-        --image $(ACR_NAME)/$(IMAGE_NAME):$(IMAGE_TAG) \
-        --registry-login-server $(ACR_NAME) \
-        --restart-policy OnFailure \
-        --cpu 1 \
-        --memory 1.5 \
-        --dns-name-label $(DNS_NAME_LABEL) \
+      az container create `
+        --resource-group $(RESOURCE_GROUP) `
+        --name $(CONTAINER_GROUP_NAME) `
+        --image $(ACR_NAME)/$(IMAGE_NAME):$(IMAGE_TAG) `
+        --registry-login-server $(ACR_NAME) `
+        --restart-policy OnFailure `
+        --cpu 1 `
+        --memory 1.5 `
+        --dns-name-label $(DNS_NAME_LABEL) `
         --ports 80 3000
+
