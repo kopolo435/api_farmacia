@@ -1,21 +1,58 @@
-# Node.js
-# Build a general Node.js project with npm.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
-
 trigger:
 - main
 
 pool:
   vmImage: ubuntu-latest
 
-steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '20.x'
-  displayName: 'Install Node.js'
+variables:
+  IMAGE_NAME: test-api-farmacia
+  IMAGE_TAG: lastest
+  ACR_NAME: topicos2testregistry.azurecr.io
+  CONTAINER_GROUP_NAME: students_api
+  RESOURCE_GROUP: test-api-running
+  DNS_NAME_LABEL: farmacia-api 
 
-- script: |
-    npm install
-    npm run build
-  displayName: 'npm install and build'
+steps:
+- task: Docker@2
+  displayName: 'Login to ACR'
+  inputs:
+    command: login
+    containerRegistry: <YOUR-ACR-SERVICE-CONNECTION>
+
+- task: Docker@2
+  displayName: 'Build Docker Image'
+  inputs:
+    command: build
+    Dockerfile: '**/Dockerfile'
+    repository: $(ACR_NAME)/$(IMAGE_NAME)
+    tags: $(IMAGE_TAG)
+
+- task: Docker@2
+  displayName: 'Push Docker Image'
+  inputs:
+    command: push
+    repository: $(ACR_NAME)/$(IMAGE_NAME)
+    tags: $(IMAGE_TAG)
+
+- task: AzureCLI@2
+  displayName: 'Deploy to Azure Container Instances'
+  inputs:
+    azureSubscription: <YOUR-AZURE-SERVICE-CONNECTION>
+    scriptType: bash
+    scriptLocation: inlineScript
+    inlineScript: |
+      az container delete \
+        --name $(CONTAINER_GROUP_NAME) \
+        --resource-group $(RESOURCE_GROUP) \
+        --yes || true
+
+      az container create \
+        --resource-group $(RESOURCE_GROUP) \
+        --name $(CONTAINER_GROUP_NAME) \
+        --image $(ACR_NAME)/$(IMAGE_NAME):$(IMAGE_TAG) \
+        --registry-login-server $(ACR_NAME) \
+        --restart-policy OnFailure \
+        --cpu 1 \
+        --memory 1.5 \
+        --dns-name-label $(DNS_NAME_LABEL) \
+        --ports 80 3000
