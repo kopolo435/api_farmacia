@@ -11,7 +11,7 @@ variables:
   CONTAINER_GROUP_NAME: students_api
   RESOURCE_GROUP: test-api-running
   DNS_NAME_LABEL: farmacia-api
-  AZURE_RESOURCE_CONNECTION: lastest_service_connection
+  AZURE_RESOURCE_CONNECTION: azure_resource_connection
 
 steps:
 - task: Docker@2
