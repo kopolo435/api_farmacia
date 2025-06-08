@@ -30,19 +30,32 @@ steps:
     scriptType: ps
     scriptLocation: inlineScript
     inlineScript: |
+      # Obtener nombre corto del ACR (antes del primer punto)
+      $acrName = "$(ACR_NAME)".Split('.')[0]
+
+      # Obtener usuario y contraseña del ACR (devuelve dos líneas: username y password)
+      $acrCreds = az acr credential show --name $acrName --query "[username, passwords[0].value]" -o tsv
+      $acrUsername, $acrPassword = $acrCreds -split "`n"
+
+      # Eliminar el contenedor si existe
       az container delete `
         --name $(CONTAINER_GROUP_NAME) `
         --resource-group $(RESOURCE_GROUP) `
         --yes
 
+      # Crear el contenedor con credenciales para el registro privado
       az container create `
         --resource-group $(RESOURCE_GROUP) `
         --name $(CONTAINER_GROUP_NAME) `
         --image $(ACR_NAME)/$(IMAGE_NAME):$(IMAGE_TAG) `
         --registry-login-server $(ACR_NAME) `
+        --registry-username $acrUsername `
+        --registry-password $acrPassword `
         --restart-policy OnFailure `
         --cpu 1 `
         --memory 1.5 `
         --dns-name-label $(DNS_NAME_LABEL) `
         --ports 80 3000
+
+
 
