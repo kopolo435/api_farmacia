@@ -15,5 +15,7 @@ COPY . .
 # Expose the app port
 EXPOSE 3000
 
+RUN cat package.json
+
 # Start the app
 CMD ["npm", "start"]
