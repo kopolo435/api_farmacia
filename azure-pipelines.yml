@@ -51,6 +51,7 @@ steps:
         --registry-login-server $(ACR_NAME) `
         --registry-username $acrUsername `
         --registry-password $acrPassword `
+        --os-type Linux `
         --restart-policy OnFailure `
         --cpu 1 `
         --memory 1.5 `
