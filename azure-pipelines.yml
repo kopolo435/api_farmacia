@@ -8,8 +8,8 @@ variables:
   IMAGE_TAG: lastest
   ACR_NAME: topicos2testregistry.azurecr.io
   ACR_CONNECTION_NAME: TopicosRegistry
-  CONTAINER_GROUP_NAME: students_api
-  RESOURCE_GROUP: test-api-running
+  CONTAINER_GROUP_NAME: test-api-running
+  RESOURCE_GROUP: students_api
   DNS_NAME_LABEL: farmacia-api
   AZURE_RESOURCE_CONNECTION: azure_resource_connection
 
