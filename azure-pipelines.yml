@@ -1,0 +1,60 @@
+trigger:
+- main
+
+pool: mini-white-pool
+
+variables:
+  IMAGE_NAME: test-api-farmacia
+  IMAGE_TAG: lastest
+  ACR_NAME: topicos2testregistry.azurecr.io
+  ACR_CONNECTION_NAME: TopicosRegistry
+  CONTAINER_GROUP_NAME: test-api-running
+  RESOURCE_GROUP: students_api
+  DNS_NAME_LABEL: farmacia-api
+  AZURE_RESOURCE_CONNECTION: azure_resource_connection
+
+steps:
+- task: Docker@2
+  displayName: 'Login to ACR'
+  inputs:
+    command: login
+    containerRegistry: 'TopicosRegistry'
+
+- task: Docker@2
+  displayName: 'Build Docker Image'
+  inputs:
+    command: build
+    Dockerfile: 'Dockerfile'
+    repository: $(ACR_NAME)/$(IMAGE_NAME)
+    tags: $(IMAGE_TAG)
+
+- task: Docker@2
+  displayName: 'Push Docker Image'
+  inputs:
+    command: push
+    repository: $(ACR_NAME)/$(IMAGE_NAME)
+    tags: $(IMAGE_TAG)
+
+- task: AzureCLI@2
+  displayName: 'Deploy to Azure Container Instances'
+  inputs:
+    azureSubscription: $(AZURE_RESOURCE_CONNECTION)
+    scriptType: ps
+    scriptLocation: inlineScript
+    inlineScript: |
+      az container delete `
+        --name $(CONTAINER_GROUP_NAME) `
+        --resource-group $(RESOURCE_GROUP) `
+        --yes
+
+      az container create `
+        --resource-group $(RESOURCE_GROUP) `
+        --name $(CONTAINER_GROUP_NAME) `
+        --image $(ACR_NAME)/$(IMAGE_NAME):$(IMAGE_TAG) `
+        --registry-login-server $(ACR_NAME) `
+        --restart-policy OnFailure `
+        --cpu 1 `
+        --memory 1.5 `
+        --dns-name-label $(DNS_NAME_LABEL) `
+        --ports 80 3000
+
